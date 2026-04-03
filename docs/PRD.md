@@ -11,10 +11,7 @@ A Chrome extension that helps users learn English vocabulary efficiently. Users 
 ### F1 — Extension Shell
 Chrome extension (Manifest V3) with a popup panel UI.
 
-### F2 — Keyboard Shortcut
-Opens popup via `Cmd+Shift+V` (Mac) / `Ctrl+Shift+V` (Windows/Linux).
-
-### F3 — Add Word Tab
+### F2 — Add Word Tab
 Input field + "Look up" button for entering any English word.
 
 ### F4 — Dictionary Lookup
@@ -41,10 +38,7 @@ Displays a user-friendly error message if the API is unreachable or the word is 
 ### F11 — Newest-First Order
 Newly saved words appear at the top of the list.
 
-### F12 — Keyboard Shortcut Hint
-Footer always shows the platform-appropriate keyboard shortcut.
-
-### F13 — IPA Phonetics
+### F12 — IPA Phonetics
 Phonetic notation displayed on the result card and in the word list.
 
 ### F14 — Audio Pronunciation

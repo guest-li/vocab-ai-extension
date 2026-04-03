@@ -856,14 +856,6 @@ body {
   border-color: var(--primary-color);
 }
 
-.keyboard-shortcut {
-  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-  background-color: var(--gray-light);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--gray-medium);
-  font-weight: 600;
-}
 
 /* Scrollbar styling */
 .tab-content::-webkit-scrollbar,

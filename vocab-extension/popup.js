@@ -2,10 +2,6 @@
  * Main popup script for vocabulary tool
  */
 
-// Detect platform and set keyboard shortcut
-const isMac = /Mac/.test(navigator.platform);
-const shortcutText = isMac ? 'Cmd+Shift+V' : 'Ctrl+Shift+V';
-
 // Current audio player
 let currentAudioElement = null;
 
@@ -39,7 +35,6 @@ const wordsList = document.getElementById('words-list');
 const emptyState = document.getElementById('empty-state');
 const quizModal = document.getElementById('quiz-modal');
 const quizContainer = document.getElementById('quiz-container');
-const keyboardShortcut = document.getElementById('keyboard-shortcut');
 const quizMinError = document.getElementById('quiz-min-error');
 const toast = document.getElementById('toast');
 const langSelect = document.getElementById('lang-select');
@@ -61,7 +56,6 @@ let currentSearchQuery = '';
  */
 function init() {
   setupEventListeners();
-  updateKeyboardShortcut();
   langSelect.value = getTargetLang();
   renderMyWords();
 }
@@ -119,12 +113,6 @@ function switchTab(tabName) {
   }
 }
 
-/**
- * Update keyboard shortcut display
- */
-function updateKeyboardShortcut() {
-  keyboardShortcut.textContent = shortcutText;
-}
 
 /**
  * Show loading state

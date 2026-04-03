@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx playwright:*)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "Bash(python3 -m http.server 8765)",
+      "Bash(echo \"Server PID: $!\")",
+      "Bash(curl -s http://localhost:8765/popup.html)",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "mcp__plugin_playwright_playwright__browser_fill_form",
+      "mcp__plugin_playwright_playwright__browser_type",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_evaluate",
+      "Bash(curl -s \"https://api.dictionaryapi.dev/api/v2/entries/en/pernicious\")",
+      "Bash(python3 -c ':*)",
+      "Bash(curl -s \"https://api.dictionaryapi.dev/api/v2/entries/en/ephemeral\")",
+      "mcp__plugin_playwright_playwright__browser_handle_dialog",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_tabs",
+      "Bash(node:*)",
+      "Bash(du -sh *)",
+      "Bash(chmod +x build.sh)",
+      "Bash(bash build.sh)",
+      "Bash(mkdir -p vocab-extension)",
+      "Bash(cp manifest.json popup.html popup.js storage.js styles.css vocab-extension/)",
+      "Bash(cp -r icons vocab-extension/icons)",
+      "Bash(rm manifest.json popup.html popup.js storage.js styles.css)",
+      "Bash(rm -rf icons)",
+      "Bash(unzip -l vocab-tool.zip)",
+      "Bash(gh auth:*)",
+      "Bash(brew list:*)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(export PATH=\"/usr/local/bin:$PATH\")",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(ssh -T git@github.com)",
+      "Bash(git remote:*)"
+    ]
+  }
+}

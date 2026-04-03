@@ -17,15 +17,6 @@
       "128": "icons/icon-128.png"
     }
   },
-  "commands": {
-    "_execute_action": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+V",
-        "mac": "Command+Shift+V"
-      },
-      "description": "Open vocabulary tool"
-    }
-  },
   "permissions": [],
   "host_permissions": [
     "https://api.dictionaryapi.dev/*",
