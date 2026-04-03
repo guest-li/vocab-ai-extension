@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Tool</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Header with logo and tabs -->
+    <div class="header">
+      <div class="logo-section">
+        <span class="logo">📚</span>
+        <span class="app-title">Vocab Tool</span>
+      </div>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="add-word">
+          <span class="tab-icon">➕</span>
+          <span class="tab-label">Add Word</span>
+        </button>
+        <button class="tab-button" data-tab="my-words">
+          <span class="tab-icon">📖</span>
+          <span class="tab-label">My Words</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Add Word Tab -->
+    <div id="add-word-tab" class="tab-content active">
+      <div class="add-word-container">
+        <div class="input-section">
+          <input 
+            type="text" 
+            id="word-input" 
+            placeholder="Enter any English word..." 
+            class="word-input"
+            autocomplete="off"
+          >
+          <button id="lookup-button" class="button button-primary">
+            <span class="button-icon">🔍</span>
+            <span class="button-text">Look up</span>
+          </button>
+        </div>
+        
+        <!-- Loading state -->
+        <div id="loading-state" class="loading-state hidden">
+          <div class="spinner"></div>
+          <p>Loading...</p>
+        </div>
+
+        <!-- Error state -->
+        <div id="error-state" class="error-state hidden">
+          <p id="error-message"></p>
+          <button class="button button-secondary" id="error-dismiss">Dismiss</button>
+        </div>
+
+        <!-- Result card -->
+        <div id="result-card" class="result-card hidden">
+          <div class="result-header">
+            <div class="word-section">
+              <h2 id="result-word" class="result-word"></h2>
+              <span id="result-phonetic" class="result-phonetic"></span>
+              <button id="result-audio-button" class="audio-button" title="Play pronunciation">🔊</button>
+              <span id="result-translation" class="result-translation-badge"></span>
+            </div>
+          </div>
+
+          <div class="result-body">
+            <div class="result-section">
+              <h3>English Definition</h3>
+              <div id="result-explanation" class="result-text"></div>
+            </div>
+
+            <div class="result-section">
+              <h3>Examples</h3>
+              <div id="result-examples" class="result-examples"></div>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button id="save-button" class="button button-primary">Save</button>
+            <button id="discard-button" class="button button-secondary">Discard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Words Tab -->
+    <div id="my-words-tab" class="tab-content">
+      <div class="my-words-container">
+        <div class="search-section">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search words..."
+            class="search-input"
+            autocomplete="off"
+          >
+          <button id="quiz-button" class="button button-secondary quiz-button">Quiz</button>
+        </div>
+        <div class="data-actions">
+          <button id="export-button" class="button button-secondary data-btn" title="Export all words to a JSON file">⬇ Export</button>
+          <label class="button button-secondary data-btn" title="Import words from a JSON file">
+            ⬆ Import
+            <input type="file" id="import-input" accept=".json" style="display:none">
+          </label>
+        </div>
+
+        <div id="quiz-min-error" class="quiz-min-error hidden">Need at least 4 saved words to start a quiz.</div>
+        <div id="words-list" class="words-list"></div>
+        <div id="empty-state" class="empty-state">
+          <p>No words yet. Start by adding your first word!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="modal hidden">
+      <div class="modal-content">
+        <div id="quiz-container" class="quiz-container"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span>Shortcut: <span id="keyboard-shortcut" class="keyboard-shortcut"></span></span>
+      <label class="lang-label">
+        Translate to:
+        <select id="lang-select" class="lang-select">
+          <option value="zh-CN">简体中文</option>
+          <option value="zh-TW">繁體中文</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="pt">Português</option>
+          <option value="ru">Русский</option>
+          <option value="ar">العربية</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

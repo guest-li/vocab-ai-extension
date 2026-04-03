@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+vocab-tool.zip
+.DS_Store
+.env
+*.log
+test-results/
+.playwright/
+.playwright-mcp/
+*.png
