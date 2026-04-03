@@ -2,6 +2,20 @@
 
 A Chrome extension for learning English vocabulary — look up words, save them, and test yourself with a quiz.
 
+## Screenshots
+
+| Add Word | Lookup Result |
+|---|---|
+| ![Add Word tab](docs/screenshots/01-add-word.png) | ![Lookup result card](docs/screenshots/02-lookup-result.png) |
+
+| My Words | Word Expanded |
+|---|---|
+| ![My Words list](docs/screenshots/03-my-words.png) | ![Expanded word detail](docs/screenshots/04-word-expanded.png) |
+
+| Quiz Mode |
+|---|
+| ![Quiz question](docs/screenshots/05-quiz-mode.png) |
+
 ## Features
 
 - **Look up any word** — fetches definition, IPA phonetic, and translation in one click
@@ -31,7 +45,6 @@ A Chrome extension for learning English vocabulary — look up words, save them,
 
 | Action | How |
 |---|---|
-| Open popup | `Cmd+Shift+V` (Mac) / `Ctrl+Shift+V` (Windows) |
 | Look up a word | Type in the input field → click **Look up** |
 | Save a word | Click **Save** on the result card |
 | Browse saved words | Click the **My Words** tab |
