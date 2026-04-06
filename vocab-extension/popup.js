@@ -606,7 +606,10 @@ function runQuiz(quizWords) {
 
     quizContainer.innerHTML = `
       <div class="quiz-header">
-        <h2>Vocabulary Quiz</h2>
+        <div class="quiz-header-row">
+          <h2>Vocabulary Quiz</h2>
+          <button class="quiz-quit-button button button-secondary">X</button>
+        </div>
         <div class="quiz-progress">${currentQuestionIndex + 1} of ${quizWords.length}</div>
       </div>
       <div class="quiz-card">
@@ -627,6 +630,15 @@ function runQuiz(quizWords) {
         </div>
       </div>
     `;
+
+    // Setup quit button
+    const quitBtn = quizContainer.querySelector('.quiz-quit-button');
+    if (quitBtn) {
+      quitBtn.addEventListener('click', () => {
+        quizModal.classList.add('hidden');
+        switchTab('my-words');
+      });
+    }
 
     // Setup audio button
     const audioBtn = quizContainer.querySelector('.word-item-audio');
