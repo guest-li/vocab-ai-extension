@@ -8,7 +8,6 @@ let currentAudioElement = null;
 // API endpoints
 const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en';
 const TRANSLATION_API = 'https://api.mymemory.translated.net/get';
-const GOOGLE_TTS_API = 'https://translate.google.com/translate_tts';
 
 // DOM elements
 const app = document.getElementById('app');
@@ -265,15 +264,18 @@ function extractExamples(dictResponse) {
  * Handle word lookup
  */
 async function handleLookup() {
+  if (lookupButton.disabled) return;
+
   const word = wordInput.value.trim();
-  
+
   if (!word) {
     showError('Please enter a word');
     return;
   }
 
+  lookupButton.disabled = true;
   showLoading();
-  
+
   try {
     console.info(`[Vocab Tool] Looking up word: "${word}"`);
     
@@ -303,6 +305,8 @@ async function handleLookup() {
     const errorMsg = error.message || 'Failed to look up word. Please check your internet connection.';
     showError(errorMsg);
     console.error('[Vocab Tool] Lookup error:', error);
+  } finally {
+    lookupButton.disabled = false;
   }
 }
 
@@ -450,7 +454,6 @@ function createWordItem(word) {
   div.innerHTML = `
     <div class="word-item-header">
       <div class="word-item-title">
-        <span class="word-item-expand-icon">▶</span>
         <strong>${escapeHtml(word.word)}</strong>
         <span class="word-item-phonetic">${phonetic}</span>
         <button class="word-item-audio" data-word="${escapeHtml(word.word)}" title="Play pronunciation">🔊</button>
@@ -489,13 +492,22 @@ function createWordItem(word) {
     playAudio(word.word);
   });
 
-  // Delete button
+  // Delete button — inline confirmation
   const deleteBtn = div.querySelector('.word-item-delete');
+  let deleteConfirmTimer = null;
   deleteBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (confirm(`Delete "${word.word}"?`)) {
+    if (deleteBtn.classList.contains('confirming')) {
+      clearTimeout(deleteConfirmTimer);
       VocabStorage.deleteWord(word.id);
       renderMyWords();
+    } else {
+      deleteBtn.classList.add('confirming');
+      deleteBtn.textContent = '?';
+      deleteConfirmTimer = setTimeout(() => {
+        deleteBtn.classList.remove('confirming');
+        deleteBtn.textContent = '🗑️';
+      }, 2000);
     }
   });
 
@@ -620,7 +632,7 @@ function runQuiz(quizWords) {
             <button class="word-item-audio" data-word="${escapeHtml(word.word)}" title="Play pronunciation">🔊</button>
           </div>
         </div>
-        <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Choose the correct Chinese translation:</p>
+        <p class="quiz-instruction">Choose the correct Chinese translation:</p>
         <div class="quiz-options">
           ${options.map((option, idx) => `
             <button class="quiz-option" data-option="${escapeHtml(option)}" data-correct="${option === correctTranslation}">
@@ -650,9 +662,13 @@ function runQuiz(quizWords) {
     }
 
     // Setup option buttons
+    let answered = false;
     const optionButtons = quizContainer.querySelectorAll('.quiz-option');
     optionButtons.forEach(btn => {
       btn.addEventListener('click', () => {
+        if (answered) return;
+        answered = true;
+
         const isCorrect = btn.dataset.correct === 'true';
         results.push({ word, isCorrect });
 
@@ -715,10 +731,15 @@ function showResults(results) {
         </div>
       ` : ''}
       <div class="quiz-button-container">
-        <button class="button button-primary" onclick="quizModal.classList.add('hidden'); switchTab('my-words');">Back to Words</button>
+        <button class="button button-primary quiz-back-button">Back to Words</button>
       </div>
     </div>
   `;
+
+  quizContainer.querySelector('.quiz-back-button').addEventListener('click', () => {
+    quizModal.classList.add('hidden');
+    switchTab('my-words');
+  });
 }
 
 /**

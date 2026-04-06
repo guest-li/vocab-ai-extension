@@ -27,10 +27,7 @@
             class="word-input"
             autocomplete="off"
           >
-          <button id="lookup-button" class="button button-primary">
-            <span class="button-icon">🔍</span>
-            <span class="button-text">Look up</span>
-          </button>
+          <button id="lookup-button" class="button button-primary">Look up</button>
         </div>
         
         <!-- Loading state -->
@@ -87,12 +84,12 @@
             class="search-input"
             autocomplete="off"
           >
-          <button id="quiz-button" class="button button-secondary quiz-button">Quiz</button>
+          <button id="quiz-button" class="button button-primary quiz-button">Quiz</button>
         </div>
         <div class="data-actions">
-          <button id="export-button" class="button button-secondary data-btn" title="Export all words to a JSON file">⬇ Export</button>
+          <button id="export-button" class="button button-secondary data-btn" title="Export all words to a JSON file">Export</button>
           <label class="button button-secondary data-btn" title="Import words from a JSON file">
-            ⬆ Import
+            Import
             <input type="file" id="import-input" accept=".json" style="display:none">
           </label>
         </div>
@@ -132,7 +129,7 @@
     </div>
 
     <!-- Toast notification -->
-    <div id="toast" class="toast hidden"></div>
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
   </div>
 
   <script src="storage.js"></script>
