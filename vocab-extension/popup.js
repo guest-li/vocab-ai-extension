@@ -632,7 +632,7 @@ function runQuiz(quizWords) {
             <button class="word-item-audio" data-word="${escapeHtml(word.word)}" title="Play pronunciation">🔊</button>
           </div>
         </div>
-        <p class="quiz-instruction">Choose the correct Chinese translation:</p>
+        <p class="quiz-instruction">Choose the correct translation:</p>
         <div class="quiz-options">
           ${options.map((option, idx) => `
             <button class="quiz-option" data-option="${escapeHtml(option)}" data-correct="${option === correctTranslation}">
