@@ -37,7 +37,10 @@
       "Bash(git commit:*)",
       "Bash(gh repo:*)",
       "Bash(ssh -T git@github.com)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(pkill -f \"socketserver\")",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "Bash(git push:*)"
     ]
   }
 }
