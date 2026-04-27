@@ -7,7 +7,7 @@ let currentAudioElement = null;
 
 // API endpoints
 const DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en';
-const TRANSLATION_API = 'https://api.mymemory.translated.net/get';
+const TRANSLATION_API = 'https://translate.googleapis.com/translate_a/single';
 
 // DOM elements
 const app = document.getElementById('app');
@@ -166,24 +166,68 @@ async function fetchFromDictionary(word) {
 }
 
 /**
- * Fetch translation from MyMemory API
+ * Fetch translation from Google Translate (unofficial endpoint).
+ * Uses dt=t for the primary translation and dt=bd for alternative
+ * dictionary meanings grouped by part of speech.
+ * Returns multiple distinct meanings joined by '；' if available.
  */
 async function fetchTranslation(word) {
   try {
-    const params = new URLSearchParams({
-      q: word,
-      langpair: `en|${getTargetLang()}`
-    });
-    const response = await fetch(`${TRANSLATION_API}?${params}`);
+    const targetLang = getTargetLang();
+    // URLSearchParams can't carry duplicate keys cleanly, so build manually.
+    const url = `${TRANSLATION_API}?client=gtx&sl=en&tl=${encodeURIComponent(targetLang)}&dt=t&dt=bd&q=${encodeURIComponent(word)}`;
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to fetch translation');
     }
     const data = await response.json();
-    return data.responseData?.translatedText || '';
+    return extractTranslations(data, word);
   } catch (error) {
     console.error('[Vocab Tool] Translation API error:', error);
     throw error;
   }
+}
+
+/**
+ * Extract distinct translation meanings from Google Translate response.
+ * Response shape (relevant slices):
+ *   data[0] = [[translatedSegment, sourceSegment, ...], ...]   // main translation
+ *   data[1] = [[posLabel, [terms...], [...], posKey, ...], ...] // dictionary entries
+ */
+function extractTranslations(data, word) {
+  const MAX_MEANINGS = 8;
+  const wordLower = (word || '').trim().toLowerCase();
+  const seen = new Set();
+  const translations = [];
+
+  const tryAdd = (text) => {
+    const t = (text || '').trim();
+    if (!t) return;
+    const norm = t.toLowerCase();
+    if (seen.has(norm)) return;
+    if (norm === wordLower) return; // skip untranslated passthrough
+    seen.add(norm);
+    translations.push(t);
+  };
+
+  if (Array.isArray(data) && Array.isArray(data[0])) {
+    for (const segment of data[0]) {
+      if (Array.isArray(segment)) tryAdd(segment[0]);
+    }
+  }
+
+  if (Array.isArray(data) && Array.isArray(data[1])) {
+    for (const entry of data[1]) {
+      if (translations.length >= MAX_MEANINGS) break;
+      if (!Array.isArray(entry) || !Array.isArray(entry[1])) continue;
+      for (const term of entry[1]) {
+        if (translations.length >= MAX_MEANINGS) break;
+        tryAdd(term);
+      }
+    }
+  }
+
+  return translations.join('；');
 }
 
 /**
@@ -319,7 +363,7 @@ function displayResult() {
   resultWord.textContent = currentResult.word;
   resultPhonetic.textContent = currentResult.phonetic ? `/${currentResult.phonetic}/` : '';
   resultExplanation.textContent = currentResult.english_explanation;
-  resultTranslation.textContent = currentResult.chinese_translation;
+  renderTranslationChips(resultTranslation, currentResult.chinese_translation);
 
   // Display examples
   resultExamples.innerHTML = '';
@@ -457,7 +501,7 @@ function createWordItem(word) {
         <strong>${escapeHtml(word.word)}</strong>
         <span class="word-item-phonetic">${phonetic}</span>
         <button class="word-item-audio" data-word="${escapeHtml(word.word)}" title="Play pronunciation">🔊</button>
-        <span class="word-item-translation-badge">${escapeHtml(word.chinese_translation)}</span>
+        <div class="word-item-translations">${buildTranslationChipsHtml(word.chinese_translation)}</div>
       </div>
       <div class="word-item-actions">
         <button class="word-item-delete" data-word-id="${word.id}" title="Delete word">🗑️</button>
@@ -740,6 +784,38 @@ function showResults(results) {
     quizModal.classList.add('hidden');
     switchTab('my-words');
   });
+}
+
+/**
+ * Split a stored translation string into individual meanings.
+ * Splits on Chinese semicolon (；), regular semicolon, or commas.
+ */
+function splitTranslations(text) {
+  if (!text) return [];
+  return text.split(/[；;,，]/).map(s => s.trim()).filter(Boolean);
+}
+
+/**
+ * Render translation meanings as chips into a container element.
+ */
+function renderTranslationChips(container, translation) {
+  container.innerHTML = '';
+  const meanings = splitTranslations(translation);
+  meanings.forEach(meaning => {
+    const chip = document.createElement('span');
+    chip.className = 'translation-chip';
+    chip.textContent = meaning;
+    container.appendChild(chip);
+  });
+}
+
+/**
+ * Build chip HTML markup for use inside template strings.
+ */
+function buildTranslationChipsHtml(translation) {
+  return splitTranslations(translation)
+    .map(m => `<span class="translation-chip">${escapeHtml(m)}</span>`)
+    .join('');
 }
 
 /**

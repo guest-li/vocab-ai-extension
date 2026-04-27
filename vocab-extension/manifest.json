@@ -20,6 +20,6 @@
   "permissions": [],
   "host_permissions": [
     "https://api.dictionaryapi.dev/*",
-    "https://api.mymemory.translated.net/*"
+    "https://translate.googleapis.com/*"
   ]
 }
